@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <img src="logo1.png" alt="Logo" width="100px" height="95px">
+  </header>
+  <h2>Paso 4: Descargue su código QR</h2>
+
+  <!-- Mostrar el código QR generado -->
+  <div id="qrCode"></div>
+  <button href="javascript:void(0);" class="btn" onclick="downloadQR()">Descargar QR</button>
+  <br>
+  <button href="javascript:void(0);" class="btn" onclick="prevStep('paso3.html')">Anterior</button>
+
+
+  <script>
+    function prevStep(prevPage) {
+      // Redirigir a la página anterior
+      window.location.href = prevPage;
+    }
+
+    // Función para descargar el código QR
+    function downloadQR() {
+      // Recuperar el color y el contenido almacenados en localStorage
+      var color = localStorage.getItem('color');
+      var contenido = localStorage.getItem('contenido');
+
+      // Crear un nuevo objeto QRCode
+      var qrcode = new QRCode(document.getElementById("qrCode"), {
+        text: contenido,
+        colorDark: color,
+        correctLevel: QRCode.CorrectLevel.H // Ajusta la corrección de errores según sea necesario
+      });
+
+      // Descargar la imagen del código QR
+      var canvas = document.querySelector("canvas");
+      var qrImage = canvas.toDataURL('image/png');
+      var link = document.createElement('a');
+      link.href = qrImage;
+      link.download = 'codigoQR.png';
+      link.click();
+    }
+  </script>
+</body>
+</html>

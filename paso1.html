@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>Generador de Códigos QR - Paso 1</title>
+</head>
+<body>
+  <header>
+    <div class="logo">
+    <img src="logo1.png" alt="Logo" width="100px" height="95px">
+    </div>
+  </header>
+  <h1>Códigos QR para Dummies</h1>
+  <h2>Paso 1: Elija el color del código QR</h2>
+  
+  <label for="color">Colores Disponibles:</label>
+  <select id="color" required>
+    <option value="black">Negro</option>
+    <option value="red">Rojo</option>
+    <option value="blue">Azul</option>
+    <option value="orange">Naranja</option>
+    <option value="green">Verde</option>
+    <option value="pink">Rosa</option>
+  </select>
+
+  <br>
+  <button href="javascript:void(0);" class="btn" onclick="nextStep('paso2.html')">Siguiente</button>
+  <script>
+    function nextStep(nextPage) {
+      // Guardar el color seleccionado en localStorage antes de pasar al siguiente paso
+      localStorage.setItem('color', document.getElementById('color').value);
+      // Redirigir a la siguiente página
+      window.location.href = nextPage;
+    }
+  </script>
+</body>
+</html>

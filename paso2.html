@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>Generador de Códigos QR - Paso 2</title>
+</head>
+<body>
+  <header>
+    <img src="logo1.png" alt="Logo" width="100px" height="95px">
+  </header>
+  <h2>Paso 2: Elija el contenido que desea añadir al QR</h2>
+
+  <label for="tipoContenido">Tipo de Contenido:</label>
+  <select id="tipoContenido" required>
+    <option value="texto">Texto</option>
+    <option value="url">URL</option>
+    <option value="telefono">Teléfono</option>
+    <option value="wifi">WiFi</option>
+    <option value="mp3mp4">MP3/MP4</option>
+    <option value="Pdf">PDF</option>
+    <option value="geolocalizacion">Geolocalización</option>
+    <!-- Puedes agregar más opciones según tus necesidades -->
+  </select>
+
+  <br>
+  <button onclick="prevStep('paso1.html')">Anterior</button>
+  <button onclick="nextStep('paso3.html')">Siguiente</button>
+
+  <script>
+      function prevStep(prevPage) {
+      // Redirigir a la página anterior
+      window.location.href = prevPage;
+    }
+
+    function nextStep(nextPage) {
+      // Guardar el tipo de contenido seleccionado en localStorage antes de pasar al siguiente paso
+      localStorage.setItem('tipoContenido', document.getElementById('tipoContenido').value);
+      // Redirigir a la siguiente página
+      window.location.href = nextPage;
+    }
+  </script>
+</body>
+</html>
+

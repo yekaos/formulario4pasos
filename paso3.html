@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <title>Generador de Códigos QR - Paso 3</title>
+</head>
+<body>
+  <header>
+    <img src="logo1.png" alt="Logo" width="100px" height="95px">
+  </header>
+  <h2>Paso 3: Ingrese detalles adicionales</h2>
+
+  <!-- Según el tipo de contenido seleccionado en el paso 2, mostrar campos adicionales -->
+  <div id="detallesTexto">
+    <label for="texto">Texto:</label>
+    <input type="text" id="texto" placeholder="Ingrese el texto" required>
+  </div>
+
+  <div id="detallesURL" style="display:none;">
+    <label for="url">URL:</label>
+    <input type="url" id="url" placeholder="Ingrese la URL" required>
+  </div>
+
+  <div id="detallesTelefono" style="display:none;">
+    <label for="telefono">Número de Teléfono:</label>
+    <input type="tel" id="telefono" placeholder="Ingrese el número de teléfono" required>
+  </div>
+
+  <div id="detallesWifi" style="display:none;">
+    <label for="nombreWifi">Nombre de la WiFi:</label>
+    <input type="text" id="nombreWifi" placeholder="Ingrese el nombre de la WiFi" required>
+
+    <br>
+
+    <label for="claveWifi">Clave de la WiFi:</label>
+    <input type="password" id="claveWifi" placeholder="Ingrese la clave de la WiFi" required>
+  </div>
+
+  <div id="detallesMp3/Mp4" style="display:none;">
+    <label for="Mp3">Selecciona el MP3 a añadir:</label>
+    <input type="file" id="qr-file" name="qr-file" accept="audio/*">
+
+    <br>
+
+    <label for="Mp4">Selecciona el MP4 a añadir:</label>
+    <input type="file" id="qr-file" name="qr-file" accept="video/*">
+  </div>
+  
+  <div id="detallesPdf" style="display:none;">
+    <label for="pdf">Selecciona el PDF a añadir:</label>
+    <input type="file" id="qr-file-pdf" name="qr-file-pdf" accept=".pdf">
+  </div>
+
+  <div id="detallesGeolocalizacion" style="display:none;">
+    <label for="map">Selecciona la ubicación en el mapa:</label>
+    <div id="map" style="height: 300px; width: 100%;"></div>
+  </div>
+  
+  <br>
+  <button href="javascript:void(0);" class="btn" onclick="prevStep('paso2.html')">Anterior</button>
+  <button href="javascript:void(0);" class="btn" onclick="nextStep('paso4.html')">Siguiente</button>
+
+  <script>
+    
+    function prevStep(prevPage) {
+      // Redirigir a la página anterior
+      window.location.href = prevPage;
+    }
+
+    function nextStep(nextPage) {
+      // Guardar detalles adicionales según el tipo de contenido seleccionado en localStorage antes de pasar al siguiente paso
+      var tipoContenido = localStorage.getItem('tipoContenido');
+
+      if (tipoContenido === 'texto') {
+        localStorage.setItem('contenido', document.getElementById('texto').value);
+      } else if (tipoContenido === 'url') {
+        localStorage.setItem('contenido', document.getElementById('url').value);
+      } else if (tipoContenido === 'telefono') {
+        localStorage.setItem('contenido', document.getElementById('telefono').value);
+      }
+      else if (tipoContenido === 'wifi') {
+        localStorage.setItem('nombreWifi', document.getElementById('nombreWifi').value);
+        localStorage.setItem('claveWifi', document.getElementById('claveWifi').value);
+      }
+      else if (tipoContenido === 'mp3/mp4') {
+        localStorage.setItem('Mp3', document.getElementById('Mp3').value);
+        localStorage.setItem('Mp4', document.getElementById('Mp4').value);
+      }
+      else if (tipoContenido === 'qr-file-pdf') {
+        localStorage.setItem('contenido', document.getElementById('qr-file-pdf').value);
+      }
+      else if (tipoContenido === 'geolocalizacion') {
+        localStorage.setItem('map', document.getElementById('map').value);
+}
+
+      // Redirigir a la siguiente página
+      window.location.href = nextPage;
+    }
+
+    // Mostrar campos adicionales según el tipo de contenido seleccionado al cargar la página
+    window.onload = function () {
+      var tipoContenido = localStorage.getItem('tipoContenido');
+      
+      if (tipoContenido === 'texto') {
+        document.getElementById('detallesTexto').style.display = 'block';
+      } else if (tipoContenido === 'url') {
+        document.getElementById('detallesURL').style.display = 'block';
+      } else if (tipoContenido === 'telefono') {
+        document.getElementById('detallesTelefono').style.display = 'block';
+      }
+      else if (tipoContenido === 'wifi') {
+        document.getElementById('detallesWifi').style.display = 'block';
+      }
+      else if (tipoContenido === 'mp3mp4') {
+        document.getElementById('detallesMp3/Mp4').style.display = 'block';
+      }
+      else if (tipoContenido === 'Pdf') {
+        document.getElementById('detallesPdf').style.display = 'block';
+      }
+      else if (tipoContenido === 'geolocalizacion') {
+        document.getElementById('detallesGeolocalizacion').style.display = 'block';
+        initMap();
+    }
+  }
+    function initMap() {
+      var map = L.map('map').setView([0, 0], 2);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+      }).addTo(map);
+
+      // Agrega un control de clic al mapa
+      map.on('click', function (event) {
+        var coordinates = event.latlng;
+
+        // Borra marcadores existentes
+        map.eachLayer(function (layer) {
+          if (layer instanceof L.Marker) {
+            map.removeLayer(layer);
+          }
+        });
+
+        // Agrega un nuevo marcador en la posición clicada
+        L.marker(coordinates).addTo(map);
+        console.log('Latitud: ' + coordinates.lat + ', Longitud: ' + coordinates.lng);
+
+        // Puedes almacenar las coordenadas en localStorage si las necesitas para el siguiente paso
+      });
+    }
+  </script>
+</body>
+</html>
